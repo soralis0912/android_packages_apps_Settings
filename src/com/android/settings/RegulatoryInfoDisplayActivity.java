@@ -29,6 +29,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.ColorMatrix;
+import android.content.res.Configuration;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
@@ -96,6 +99,16 @@ public class RegulatoryInfoDisplayActivity extends Activity implements
         if (regulatoryInfoDrawableExists) {
             View view = getLayoutInflater().inflate(R.layout.regulatory_info, null);
             ImageView image = view.findViewById(R.id.regulatoryInfo);
+            int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES ) {
+                ColorMatrixColorFilter colorFilter = new ColorMatrixColorFilter(new ColorMatrix(new float[]{
+                    -1, 0, 0, 0, 255,
+                    0, -1, 0, 0, 255,
+                    0, 0, -1, 0, 255,
+                    0, 0, 0, 1, 0
+                }));
+                image.setColorFilter(colorFilter);
+            }
             if (regulatoryInfoBitmap != null) {
                 image.setImageBitmap(regulatoryInfoBitmap);
             } else {
